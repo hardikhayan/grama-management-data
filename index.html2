@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="te">
 <head>
     <meta charset="UTF-8">
@@ -168,7 +168,7 @@
         <div class="menu-card" onclick="showScreen('groupsScreen')">👥 Groups Management</div>
         <div class="menu-card" onclick="openCustomersScreen()">👤 Customers Management</div>
         <div class="menu-card" onclick="openCollectionsScreen()">💰 Collections Entry</div>
-        <div class="menu-card" onclick="alert('రిపోర్ట్స్ త్వరలో రానుంది...')">📊 Reports Screen</div>
+        <div class="menu-card" onclick="alert('రిపోర్ట్స్ స్క్రీన్ త్వరలో రానుంది...')">📊 Reports Screen</div>
     </div>
 
     <button class="logout-btn" onclick="handleLogout()">లాగ్ అవుట్</button>
@@ -267,13 +267,13 @@
             if (user === 'admin' && pass === '1234') {
                 showScreen('dashboardScreen');
             } else {
-                alert('తప్పు యూజర్ నేమ్ లేదా పాస్‌వర్డ్! (User: admin, Pass: 1234)');
+                alert('తప్పు యూజర్ నేమ్ లేదా పాస్‌వర్డ్! (User: admin, Pass: 1234 కొట్టండి)');
             }
         } else {
             const phone = document.getElementById('phone').value;
             if (phone !== '') {
                 showScreen('dashboardScreen');
-                document.getElementById('welcomeText').innerText = `స్వాగతం, కస్టమర్ (${phone})!`;
+                document.getElementById('welcomeText').innerText = `స్వాగతం!`;
             } else {
                 alert('దయచేసి మొబైల్ నెంబర్ ఎంటర్ చేయండి!');
             }
@@ -409,4 +409,3 @@
 </script>
 </body>
 </html>
-        
