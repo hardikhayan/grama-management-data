@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="te">
 <head>
@@ -45,7 +44,7 @@
             color: white;
             border-radius: 5px 5px 0 0;
         }
-        input, select {
+        input {
             width: 100%;
             padding: 12px;
             margin-top: 10px;
@@ -74,9 +73,8 @@
             font-size: 14px;
             color: gray;
         }
-        /* Dashboard Styles */
         .hidden {
-            display: none;
+            display: none !important;
         }
         .dashboard-menu {
             display: grid;
@@ -175,14 +173,13 @@
     }
 
     function handleLogin() {
-        // టెస్టింగ్ కోసం సింపుల్ లాగిన్ క్రెడెన్షియల్స్
         if (currentRole === 'admin') {
             const user = document.getElementById('username').value;
             const pass = document.getElementById('password').value;
             if (user === 'admin' && pass === '1234') {
                 showDashboard('Admin');
             } else {
-                alert('తప్పు యూజర్ నేమ్ లేదా పాస్‌వర్డ్! (టెస్టింగ్ కోసం User: admin, Pass: 1234 కొట్టండి)');
+                alert('తప్పు యూజర్ నేమ్ లేదా పాస్‌వర్డ్! (User: admin, Pass: 1234 కొట్టండి)');
             }
         } else {
             const phone = document.getElementById('phone').value;
@@ -204,7 +201,6 @@
     function handleLogout() {
         document.getElementById('dashboardScreen').classList.add('hidden');
         document.getElementById('loginScreen').classList.remove('hidden');
-        // ఇన్‌పుట్స్ క్లియర్ చేయడం
         document.getElementById('username').value = '';
         document.getElementById('phone').value = '';
         document.getElementById('password').value = '';
