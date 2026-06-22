@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+                     <!DOCTYPE html>
 <html lang="te">
 <head>
     <meta charset="UTF-8">
@@ -113,6 +113,12 @@
             border-left: 5px solid #198754;
             margin-bottom: 10px;
             border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .data-info {
+            flex: 1;
         }
         .data-item h4 {
             margin: 0;
@@ -123,7 +129,22 @@
             font-size: 13px;
             color: #666;
         }
-        /* Tables for Reports */
+        .action-btns {
+            display: flex;
+            gap: 5px;
+        }
+        .del-btn {
+            background: #dc3545;
+            padding: 5px 10px;
+            font-size: 12px;
+            width: auto;
+        }
+        .wa-btn {
+            background: #25D366;
+            padding: 5px 10px;
+            font-size: 12px;
+            width: auto;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -190,86 +211,83 @@
     <button class="logout-btn" onclick="handleLogout()">లాగ్ అవుట్</button>
 </div>
 
+<div id="customerDashboardScreen" class="container hidden">
+    <h2 id="custWelcomeText">స్వాగతం, కస్టమర్!</h2>
+    
+    <div style="background: #eef7f2; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid #198754;">
+        <h3 style="margin: 0 0 10px 0; color: #198754;" id="custBoxName">పేరు: -</h3>
+        <p style="margin: 5px 0;" id="custBoxGroup">గ్రూప్: -</p>
+        <p style="margin: 5px 0; font-weight: bold;" id="custBoxLoan">మొత్తం లోన్: ₹0</p>
+        <p style="margin: 5px 0; font-weight: bold; color: green;" id="custBoxPaid">ఇప్పటివరకు కట్టింది: ₹0</p>
+        <p style="margin: 5px 0; font-weight: bold; color: red;" id="custBoxBalance">బాకీ ఉన్న మొత్తం: ₹0</p>
+    </div>
+
+    <h3>మీ పేమెంట్ హిస్టరీ:</h3>
+    <div id="custHistoryList" class="data-list"></div>
+
+    <button class="logout-btn" onclick="handleLogout()">లాగ్ అవుట్</button>
+</div>
+
 <div id="groupsScreen" class="container hidden">
     <button class="back-btn" onclick="showScreen('dashboardScreen')">⬅️ డ్యాష్‌బోర్డ్‌కి వెళ్ళు</button>
     <h2>👥 కొత్త లోన్ గ్రూప్ క్రియేట్ చేయండి</h2>
-    
-    <label>గ్రూప్ పేరు (Group Name):</label>
+    <label>గ్రూప్ పేరు:</label>
     <input type="text" id="groupName" placeholder="ఉదా: శ్రీ లక్ష్మి గ్రూప్">
-
-    <label>రూట్ / గ్రామం పేరు (Route / Village):</label>
+    <label>रूట్ / గ్రామం పేరు:</label>
     <input type="text" id="groupRoute" placeholder="ఉదా: సుళ్ళురుపేట">
-
     <button onclick="createGroup()">➕ గ్రూప్ క్రియేట్ చెయ్</button>
 
     <h3>ప్రస్తుత గ్రూపుల జాబితా:</h3>
-    <div id="groupListContainer" class="data-list">
-        <p style="text-align:center; color:gray;" id="noGroupsText">ఇంకా ఏ గ్రూపులు క్రియేట్ చేయలేదు.</p>
-    </div>
+    <div id="groupListContainer" class="data-list"></div>
 </div>
 
 <div id="customersScreen" class="container hidden">
     <button class="back-btn" onclick="showScreen('dashboardScreen')">⬅️ డ్యాష్‌బోర్డ్‌కి వెళ్ళు</button>
     <h2>👤 కొత్త కస్టమర్‌ను యాడ్ చేయండి</h2>
-    
-    <label>సెలెక్ట్ గ్రూప్ (Select Group):</label>
+    <label>సెలెక్ట్ గ్రూప్:</label>
     <select id="custGroupSelect"></select>
-
-    <label>కస్టమర్ పేరు (Customer Name):</label>
+    <label>కస్టమర్ పేరు:</label>
     <input type="text" id="custName" placeholder="ఉదా: సాయికృష్ణ">
-
-    <label>మొబైల్ నెంబర్ (Mobile Number):</label>
+    <label>మొబైల్ నెంబర్:</label>
     <input type="text" id="custPhone" placeholder="Mobile Number">
-
-    <label>లోన్ మొత్తం (Loan Amount):</label>
+    <label>లోన్ మొత్తం:</label>
     <input type="number" id="custLoanAmount" placeholder="Rs. 50000">
-
     <button onclick="createCustomer()">➕ కస్టమర్‌ను యాడ్ చెయ్</button>
 
     <h3>కస్టమర్స్ జాబితా:</h3>
-    <div id="customerListContainer" class="data-list">
-        <p style="text-align:center; color:gray;" id="noCustomersText">ఇంకా ఏ కస్టమర్లను యాడ్ చేయలేదు.</p>
-    </div>
+    <div id="customerListContainer" class="data-list"></div>
 </div>
 
 <div id="collectionsScreen" class="container hidden">
     <button class="back-btn" onclick="showScreen('dashboardScreen')">⬅️ డ్యాష్‌బోర్డ్‌కి వెళ్ళు</button>
-    <h2>💰 EMI కలెక్షన్ ఎంట్రీ (Collections Entry)</h2>
-    
-    <label>సెలెక్ట్ కస్టమర్ (Select Customer):</label>
+    <h2>💰 EMI కలెక్షన్ ఎంట్రీ</h2>
+    <label>సెలెక్ట్ కస్టమర్:</label>
     <select id="collCustSelect" onchange="updateCustomerLoanInfo()"></select>
-
     <div id="loanInfoBox" style="background: #eef7f2; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-weight: bold; color: #198754;">
         మొత్తం లోన్: ₹0
     </div>
-
-    <label>కట్టిన EMI మొత్తం (Paid Amount):</label>
+    <label>కట్టిన EMI మొత్తం:</label>
     <input type="number" id="collAmount" placeholder="Rs. 2000">
-
     <button onclick="createCollection()">💾 కలెక్షన్ సేవ్ చెయ్</button>
 
     <h3>ఈరోజు వసూలైన కలెక్షన్స్ జాబితా:</h3>
-    <div id="collectionListContainer" class="data-list">
-        <p style="text-align:center; color:gray;" id="noCollectionsText">ఇంకా ఏ కలెక్షన్స్ రికార్డ్ చేయలేదు.</p>
-    </div>
+    <div id="collectionListContainer" class="data-list"></div>
 </div>
 
 <div id="reportsScreen" class="container hidden">
     <button class="back-btn" onclick="showScreen('dashboardScreen')">⬅️ డ్యాష్‌బోర్డ్‌కి వెళ్ళు</button>
     <h2>📊 లోన్ కలెక్షన్ రిపోర్ట్స్</h2>
-    
     <div style="display: flex; justify-content: space-between; margin-bottom: 15px; background: #eef7f2; padding: 10px; border-radius: 5px; font-weight: bold; color: #198754;">
         <span id="totalLoansReport">మొత్తం లోన్లు: ₹0</span>
         <span id="totalCollectedReport">మొత్తం వసూలు: ₹0</span>
     </div>
-
     <table id="reportsTable">
         <thead>
             <tr>
                 <th>కస్టమర్</th>
-                <th>గ్రూప్</th>
                 <th>లోన్</th>
                 <th>కట్టింది</th>
+                <th>రిమైండర్</th>
             </tr>
         </thead>
         <tbody id="reportsTableBody"></tbody>
@@ -278,15 +296,20 @@
 
 <script>
     let currentRole = 'admin';
-    let groupsData = [];
-    let customersData = [];
-    let collectionsData = [];
+    let groupsData = JSON.parse(localStorage.getItem('groupsData')) || [];
+    let customersData = JSON.parse(localStorage.getItem('customersData')) || [];
+    let collectionsData = JSON.parse(localStorage.getItem('collectionsData')) || [];
+
+    window.onload = function() {
+        renderGroups();
+        renderCustomers();
+        renderCollections();
+    };
 
     function switchTab(role) {
         currentRole = role;
         document.getElementById('adminTab').classList.toggle('active', role === 'admin');
         document.getElementById('customerTab').classList.toggle('active', role === 'customer');
-        
         if (role === 'admin') {
             document.getElementById('loginTitle').innerText = 'Admin Login';
             document.getElementById('userInputContainer').classList.remove('hidden');
@@ -305,13 +328,12 @@
             if (user === 'admin' && pass === '1234') {
                 showScreen('dashboardScreen');
             } else {
-                alert('తప్పు యూజర్ నేమ్ లేదా పాస్‌వర్డ్! (User: admin, Pass: 1234 కొట్టండి)');
+                alert('తప్పు యూజర్ నేమ్ లేదా పాస్‌వర్డ్!');
             }
         } else {
             const phone = document.getElementById('phone').value;
             if (phone !== '') {
-                showScreen('dashboardScreen');
-                document.getElementById('welcomeText').innerText = `స్వాగతం!`;
+                openCustomerDashboard(phone);
             } else {
                 alert('దయచేసి మొబైల్ నెంబర్ ఎంటర్ చేయండి!');
             }
@@ -321,51 +343,58 @@
     function showScreen(screenId) {
         document.getElementById('loginScreen').classList.add('hidden');
         document.getElementById('dashboardScreen').classList.add('hidden');
+        document.getElementById('customerDashboardScreen').classList.add('hidden');
         document.getElementById('groupsScreen').classList.add('hidden');
         document.getElementById('customersScreen').classList.add('hidden');
         document.getElementById('collectionsScreen').classList.add('hidden');
         document.getElementById('reportsScreen').classList.add('hidden');
         
         document.getElementById(screenId).classList.remove('hidden');
+        
+        if(screenId === 'groupsScreen') renderGroups();
+        if(screenId === 'customersScreen') renderCustomers();
+        if(screenId === 'collectionsScreen') renderCollections();
     }
 
+    // --- GROUPS ---
     function createGroup() {
         const name = document.getElementById('groupName').value;
         const route = document.getElementById('groupRoute').value;
-        if (name === '' || route === '') { alert('అన్ని వివరాలు ఎంటర్ చేయండి!'); return; }
-
+        if (!name || !route) { alert('వివరాలు ఎంటర్ చేయండి!'); return; }
         groupsData.push({ name: name, route: route });
+        localStorage.setItem('groupsData', JSON.stringify(groupsData));
         document.getElementById('groupName').value = '';
         document.getElementById('groupRoute').value = '';
-        alert('గ్రూప్ సక్సెస్‌ఫుల్ గా క్రియేట్ చేయబడింది!');
         renderGroups();
     }
 
     function renderGroups() {
         const container = document.getElementById('groupListContainer');
-        container.innerHTML = '';
-        if (groupsData.length === 0) {
-            container.innerHTML = '<p style="text-align:center; color:gray;">ఇంకా ఏ గ్రూపులు క్రియేట్ చేయలేదు.</p>';
-            return;
-        }
-        groupsData.forEach(group => {
-            container.innerHTML += `<div class="data-item"><h4>${group.name}</h4><p>📍 రూట్: ${group.route}</p></div>`;
+        if(!container) return;
+        container.innerHTML = groupsData.length === 0 ? '<p style="text-align:center; color:gray;">ఇంకా ఏ గ్రూపులు లేవు.</p>' : '';
+        groupsData.forEach((group, index) => {
+            container.innerHTML += `<div class="data-item">
+                <div class="data-info"><h4>${group.name}</h4><p>📍 రూట్: ${group.route}</p></div>
+                <button class="del-btn" onclick="deleteGroup(${index})">Delete</button>
+            </div>`;
         });
     }
 
+    function deleteGroup(index) {
+        if(confirm('ఈ గ్రూప్‌ను డిలీట్ చేయాలా?')) {
+            groupsData.splice(index, 1);
+            localStorage.setItem('groupsData', JSON.stringify(groupsData));
+            renderGroups();
+        }
+    }
+
+    // --- CUSTOMERS ---
     function openCustomersScreen() {
         const select = document.getElementById('custGroupSelect');
         select.innerHTML = '';
-        if (groupsData.length === 0) {
-            alert('కస్టమర్‌ను యాడ్ చేయడానికి ముందు ఒక గ్రూప్ క్రియేట్ చేయండి!');
-            showScreen('groupsScreen');
-            return;
-        }
-        groupsData.forEach(group => {
-            select.innerHTML += `<option value="${group.name}">${group.name}</option>`;
-        });
+        if (groupsData.length === 0) { alert('ముందు ఒక గ్రూప్ క్రియేట్ చేయండి!'); showScreen('groupsScreen'); return; }
+        groupsData.forEach(g => select.innerHTML += `<option value="${g.name}">${g.name}</option>`);
         showScreen('customersScreen');
-        renderCustomers();
     }
 
     function createCustomer() {
@@ -373,108 +402,130 @@
         const name = document.getElementById('custName').value;
         const phone = document.getElementById('custPhone').value;
         const loan = document.getElementById('custLoanAmount').value;
-
-        if (name === '' || phone === '' || loan === '') { alert('అన్ని వివరాలు ఎంటర్ చేయండి!'); return; }
-
+        if (!name || !phone || !loan) { alert('అన్ని వివరాలు ఎంటర్ చేయండి!'); return; }
+        
         customersData.push({ group: group, name: name, phone: phone, loan: parseFloat(loan), collected: 0 });
+        localStorage.setItem('customersData', JSON.stringify(customersData));
         document.getElementById('custName').value = '';
         document.getElementById('custPhone').value = '';
         document.getElementById('custLoanAmount').value = '';
-        alert('కస్టమర్ విజయవంతంగా యాడ్ చేయబడ్డారు!');
         renderCustomers();
     }
 
     function renderCustomers() {
         const container = document.getElementById('customerListContainer');
-        container.innerHTML = '';
-        if (customersData.length === 0) {
-            container.innerHTML = '<p style="text-align:center; color:gray;">ఇంకా ఏ కస్టమర్లను యాడ్ చేయలేదు.</p>';
-            return;
-        }
-        customersData.forEach(cust => {
-            container.innerHTML += `<div class="data-item"><h4>${cust.name} (${cust.group})</h4><p>📱 ఫోన్: ${cust.phone} | 💰 లోన్: ₹${cust.loan}</p></div>`;
+        if(!container) return;
+        container.innerHTML = customersData.length === 0 ? '<p style="text-align:center; color:gray;">ఇంకా ఏ కస్టమర్లు లేవు.</p>' : '';
+        customersData.forEach((cust, index) => {
+            container.innerHTML += `<div class="data-item">
+                <div class="data-info"><h4>${cust.name} (${cust.group})</h4><p>📱 ఫోన్: ${cust.phone} | 💰 లోన్: ₹${cust.loan}</p></div>
+                <button class="del-btn" onclick="deleteCustomer(${index})">Delete</button>
+            </div>`;
         });
     }
 
+    function deleteCustomer(index) {
+        if(confirm('ఈ కస్టమర్‌ను డిలీట్ చేయాలా?')) {
+            customersData.splice(index, 1);
+            localStorage.setItem('customersData', JSON.stringify(customersData));
+            renderCustomers();
+        }
+    }
+
+    // --- COLLECTIONS ---
     function openCollectionsScreen() {
         const select = document.getElementById('collCustSelect');
         select.innerHTML = '';
-        if (customersData.length === 0) {
-            alert('కలెక్ట్ ఎంట్రీ చేయడానికి ముందు కనీసం ఒక కస్టమర్‌ను యాడ్ చేయండి!');
-            showScreen('customersScreen');
-            return;
-        }
-        customersData.forEach((cust, index) => {
-            select.innerHTML += `<option value="${index}">${cust.name} (${cust.group})</option>`;
-        });
+        if (customersData.length === 0) { alert('ముందు ఒక కస్టమర్‌ను యాడ్ చేయండి!'); showScreen('customersScreen'); return; }
+        customersData.forEach((c, i) => select.innerHTML += `<option value="${i}">${c.name} (${c.group})</option>`);
         showScreen('collectionsScreen');
         updateCustomerLoanInfo();
-        renderCollections();
     }
 
     function updateCustomerLoanInfo() {
         const index = document.getElementById('collCustSelect').value;
         if(index !== '') {
-            const cust = customersData[index];
-            document.getElementById('loanInfoBox').innerText = `మొత్తం లోన్ అమౌంట్: ₹${cust.loan}`;
+            document.getElementById('loanInfoBox').innerText = `మొత్తం లోన్ అమౌంట్: ₹${customersData[index].loan}`;
         }
     }
 
     function createCollection() {
         const index = document.getElementById('collCustSelect').value;
         const amount = document.getElementById('collAmount').value;
-        if (amount === '') { alert('దయచేసి కట్టిన EMI అమౌంట్ ఎంటర్ చేయండి!'); return; }
-
+        if (!amount) { alert('అమౌంట్ ఎంటర్ చేయండి!'); return; }
+        
         const cust = customersData[index];
         cust.collected += parseFloat(amount);
-
-        collectionsData.push({ name: cust.name, group: cust.group, amount: amount, date: new Date().toLocaleDateString() });
+        
+        collectionsData.push({ name: cust.name, phone: cust.phone, group: cust.group, amount: amount, date: new Date().toLocaleDateString() });
+        localStorage.setItem('customersData', JSON.stringify(customersData));
+        localStorage.setItem('collectionsData', JSON.stringify(collectionsData));
+        
         document.getElementById('collAmount').value = '';
-        alert('కలెక్ట్ ఎంట్రీ విజయవంతంగా సేవ్ చేయబడింది!');
+        alert('కలెక్షన్ సేవ్ చేయబడింది!');
         renderCollections();
     }
 
     function renderCollections() {
         const container = document.getElementById('collectionListContainer');
-        container.innerHTML = '';
-        if (collectionsData.length === 0) {
-            container.innerHTML = '<p style="text-align:center; color:gray;">ఇంకా ఏ కలెక్షన్స్ రికార్డ్ చేయలేదు.</p>';
-            return;
-        }
+        if(!container) return;
+        container.innerHTML = collectionsData.length === 0 ? '<p style="text-align:center; color:gray;">కలెక్షన్స్ లేవు.</p>' : '';
         collectionsData.forEach(coll => {
-            container.innerHTML += `<div class="data-item"><h4>${coll.name} (${coll.group})</h4><p>💰 వసూలైన మొత్తం: ₹${coll.amount} | 📅 తేదీ: ${coll.date}</p></div>`;
+            container.innerHTML += `<div class="data-item"><h4>${coll.name}</h4><p>₹${coll.amount} | 📅 ${coll.date}</p></div>`;
         });
     }
 
+    // --- REPORTS & WHATSAPP REMINDER ---
     function openReportsScreen() {
         showScreen('reportsScreen');
-        let totalLoans = 0;
-        let totalCollected = 0;
+        let totalLoans = 0, totalCollected = 0;
         const tbody = document.getElementById('reportsTableBody');
         tbody.innerHTML = '';
-
-        if(customersData.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:gray;">రిపోర్ట్స్ చూపించడానికి ఎలాంటి డేటా లేదు.</td></tr>';
-            return;
-        }
-
+        
         customersData.forEach(cust => {
             totalLoans += cust.loan;
             totalCollected += cust.collected;
-            tbody.innerHTML += `
-                <tr>
-                    <td><b>${cust.name}</b></td>
-                    <td>${cust.group}</td>
-                    <td>₹${cust.loan}</td>
-                    <td style="color:green; font-weight:bold;">₹${cust.collected}</td>
-                </tr>`;
-        });
+            let balance = cust.loan - cust.collected;
+            
+            // తెలుగు వాట్సాప్ రిమైండర్ మెసేజ్ లింక్
+            let message = `నమస్కారం ${cust.name} గారు, మన గ్రామీణ లోన్ కలెక్షన్ సిస్టమ్ ప్రకారం మీ మొత్తం లోన్ బాకీ లో ఇంకా ₹${balance} చెల్లించాల్సి ఉంది. దయచేసి గమనించగలరు.`;
+            let waLink = `https://wa.me/91${cust.phone}?text=${encodeURIComponent(message)}`;
 
+            tbody.innerHTML += `<tr>
+                <td><b>${cust.name}</b></td>
+                <td>₹${cust.loan}</td>
+                <td>₹${cust.collected}</td>
+                <td><a href="${waLink}" target="_blank"><button class="wa-btn">💬 Send</button></a></td>
+            </tr>`;
+        });
         document.getElementById('totalLoansReport').innerText = `మొత్తం లోన్లు: ₹${totalLoans}`;
         document.getElementById('totalCollectedReport').innerText = `మొత్తం వసూలు: ₹${totalCollected}`;
+    }
+
+    // --- CUSTOMER DASHBOARD ---
+    function openCustomerDashboard(phone) {
+        const cust = customersData.find(c => c.phone === phone);
+        if(!cust) { alert('ఈ మొబైల్ నెంబర్‌తో ఏ కస్టమర్ లేరు!'); return; }
+        
+        showScreen('customerDashboardScreen');
+        document.getElementById('custBoxName').innerText = `పేరు: ${cust.name}`;
+        document.getElementById('custBoxGroup').innerText = `గ్రూప్: ${cust.group}`;
+        document.getElementById('custBoxLoan').innerText = `మొత్తం లోన్: ₹${cust.loan}`;
+        document.getElementById('custBoxPaid').innerText = `ఇప్పటివరకు కట్టింది: ₹${cust.collected}`;
+        document.getElementById('custBoxBalance').innerText = `బాకీ ఉన్న మొత్తం: ₹${cust.loan - cust.collected}`;
+        
+        const histContainer = document.getElementById('custHistoryList');
+        histContainer.innerHTML = '';
+        const myHistory = collectionsData.filter(col => col.phone === phone);
+        if(myHistory.length === 0) { histContainer.innerHTML = '<p style="text-align:center; color:gray;">ఎలాంటి పేమెంట్స్ లేవు.</p>'; return; }
+        
+        myHistory.forEach(h => {
+            histContainer.innerHTML += `<div class="data-item"><h4>₹${h.amount} కట్టారు</h4><p>📅 తేదీ: ${h.date}</p></div>`;
+        });
     }
 
     function handleLogout() { showScreen('loginScreen'); }
 </script>
 </body>
 </html>
+       
