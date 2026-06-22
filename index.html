@@ -1,4 +1,4 @@
-                     <!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="te">
 <head>
     <meta charset="UTF-8">
@@ -145,6 +145,11 @@
             font-size: 12px;
             width: auto;
         }
+        .paid-badge {
+            color: #198754;
+            font-weight: bold;
+            font-size: 12px;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -179,7 +184,7 @@
     
     <div id="phoneInputContainer" class="hidden">
         <label>మొబైల్ నెంబర్:</label>
-        <input type="text" id="phone" placeholder="Mobile Number">
+        <input type="number" id="phone" placeholder="10 అంకెల మొబైల్ నెంబర్">
     </div>
     
     <div id="userInputContainer">
@@ -198,7 +203,7 @@
 </div>
 
 <div id="dashboardScreen" class="container hidden">
-    <h2 id="welcomeText">స్వాగతం, అడ్మిన్!</h2>
+    <h2 id="welcomeText">箱స్వాగతం, అడ్మిన్!</h2>
     <p>యాప్ ఫీచర్స్ ఇక్కడ మేనేజ్ చేసుకోండి:</p>
 
     <div class="dashboard-menu">
@@ -233,7 +238,7 @@
     <h2>👥 కొత్త లోన్ గ్రూప్ క్రియేట్ చేయండి</h2>
     <label>గ్రూప్ పేరు:</label>
     <input type="text" id="groupName" placeholder="ఉదా: శ్రీ లక్ష్మి గ్రూప్">
-    <label>रूట్ / గ్రామం పేరు:</label>
+    <label>రూట్ / గ్రామం పేరు:</label>
     <input type="text" id="groupRoute" placeholder="ఉదా: సుళ్ళురుపేట">
     <button onclick="createGroup()">➕ గ్రూప్ క్రియేట్ చెయ్</button>
 
@@ -249,7 +254,7 @@
     <label>కస్టమర్ పేరు:</label>
     <input type="text" id="custName" placeholder="ఉదా: సాయికృష్ణ">
     <label>మొబైల్ నెంబర్:</label>
-    <input type="text" id="custPhone" placeholder="Mobile Number">
+    <input type="number" id="custPhone" placeholder="10 అంకెల మొబైల్ నెంబర్">
     <label>లోన్ మొత్తం:</label>
     <input type="number" id="custLoanAmount" placeholder="Rs. 50000">
     <button onclick="createCustomer()">➕ కస్టమర్‌ను యాడ్ చెయ్</button>
@@ -325,6 +330,7 @@
         if (currentRole === 'admin') {
             const user = document.getElementById('username').value;
             const pass = document.getElementById('password').value;
+            // ప్రొడక్షన్ కి మార్చినప్పుడు ఇక్కడ నీ ఓన్ క్రెడెన్షియల్స్ ఇచ్చుకోవచ్చు మావా
             if (user === 'admin' && pass === '1234') {
                 showScreen('dashboardScreen');
             } else {
@@ -332,11 +338,11 @@
             }
         } else {
             const phone = document.getElementById('phone').value;
-            if (phone !== '') {
-                openCustomerDashboard(phone);
-            } else {
-                alert('దయచేసి మొబైల్ నెంబర్ ఎంటర్ చేయండి!');
+            if(phone.length !== 10){
+                alert("10 అంకెల మొబైల్ నెంబర్ ఇవ్వండి");
+                return;
             }
+            openCustomerDashboard(phone);
         }
     }
 
@@ -381,9 +387,21 @@
     }
 
     function deleteGroup(index) {
-        if(confirm('ఈ గ్రూప్‌ను డిలీట్ చేయాలా?')) {
+        if(confirm('ఈ గ్రూప్‌ను డిలీట్ చేయాలా? (ఇందులో ఉన్న కస్టమర్స్ కూడా డిలీట్ అవుతారు)')) {
+            const targetGroupName = groupsData[index].name;
+            // ఆ గ్రూప్‌లో ఉన్న కస్టమర్ల పాత కలెక్షన్స్ క్లీన్ చేయడం
+            const customersInGroup = customersData.filter(c => c.group === targetGroupName);
+            customersInGroup.forEach(cust => {
+                collectionsData = collectionsData.filter(col => col.phone !== cust.phone);
+            });
+            // కస్టమర్లని డిలీట్ చేయడం
+            customersData = customersData.filter(c => c.group !== targetGroupName);
+            // గ్రూప్ డిలీట్ చేయడం
             groupsData.splice(index, 1);
+            
             localStorage.setItem('groupsData', JSON.stringify(groupsData));
+            localStorage.setItem('customersData', JSON.stringify(customersData));
+            localStorage.setItem('collectionsData', JSON.stringify(collectionsData));
             renderGroups();
         }
     }
@@ -403,6 +421,15 @@
         const phone = document.getElementById('custPhone').value;
         const loan = document.getElementById('custLoanAmount').value;
         if (!name || !phone || !loan) { alert('అన్ని వివరాలు ఎంటర్ చేయండి!'); return; }
+        
+        if(phone.length !== 10){
+            alert("10 అంకెల మొబైల్ నెంబర్ ఇవ్వండి");
+            return;
+        }
+        if(customersData.some(c => c.phone === phone)){
+            alert("ఈ మొబైల్ నెంబర్ ఇప్పటికే ఉంది!");
+            return;
+        }
         
         customersData.push({ group: group, name: name, phone: phone, loan: parseFloat(loan), collected: 0 });
         localStorage.setItem('customersData', JSON.stringify(customersData));
@@ -425,9 +452,14 @@
     }
 
     function deleteCustomer(index) {
-        if(confirm('ఈ కస్టమర్‌ను డిలీట్ చేయాలా?')) {
+        if(confirm('ఈ కస్టమర్‌ను డిలీట్ చేయాలా? (వీరి పాత కలెక్షన్స్ కూడా డిలీట్ అవుతాయి)')) {
+            // కస్టమర్ కలెక్షన్ హిస్టరీ డిలీట్
+            collectionsData = collectionsData.filter(c => c.phone !== customersData[index].phone);
+            // కస్టమర్ డిలీట్
             customersData.splice(index, 1);
+            
             localStorage.setItem('customersData', JSON.stringify(customersData));
+            localStorage.setItem('collectionsData', JSON.stringify(collectionsData));
             renderCustomers();
         }
     }
@@ -445,7 +477,8 @@
     function updateCustomerLoanInfo() {
         const index = document.getElementById('collCustSelect').value;
         if(index !== '') {
-            document.getElementById('loanInfoBox').innerText = `మొత్తం లోన్ అమౌంట్: ₹${customersData[index].loan}`;
+            let balance = customersData[index].loan - customersData[index].collected;
+            document.getElementById('loanInfoBox').innerText = `మొత్తం లోన్: ₹${customersData[index].loan} | బాకీ: ₹${balance}`;
         }
     }
 
@@ -455,6 +488,11 @@
         if (!amount) { alert('అమౌంట్ ఎంటర్ చేయండి!'); return; }
         
         const cust = customersData[index];
+        if(cust.collected + parseFloat(amount) > cust.loan){
+            alert("लोन మొత్తాన్ని మించిపోయింది!");
+            return;
+        }
+        
         cust.collected += parseFloat(amount);
         
         collectionsData.push({ name: cust.name, phone: cust.phone, group: cust.group, amount: amount, date: new Date().toLocaleDateString() });
@@ -463,6 +501,7 @@
         
         document.getElementById('collAmount').value = '';
         alert('కలెక్షన్ సేవ్ చేయబడింది!');
+        updateCustomerLoanInfo();
         renderCollections();
     }
 
@@ -475,7 +514,7 @@
         });
     }
 
-    // --- REPORTS & WHATSAPP REMINDER ---
+    // --- REPORTS ---
     function openReportsScreen() {
         showScreen('reportsScreen');
         let totalLoans = 0, totalCollected = 0;
@@ -487,15 +526,20 @@
             totalCollected += cust.collected;
             let balance = cust.loan - cust.collected;
             
-            // తెలుగు వాట్సాప్ రిమైండర్ మెసేజ్ లింక్
-            let message = `నమస్కారం ${cust.name} గారు, మన గ్రామీణ లోన్ కలెక్షన్ సిస్టమ్ ప్రకారం మీ మొత్తం లోన్ బాకీ లో ఇంకా ₹${balance} చెల్లించాల్సి ఉంది. దయచేసి గమనించగలరు.`;
-            let waLink = `https://wa.me/91${cust.phone}?text=${encodeURIComponent(message)}`;
+            let actionContent = '';
+            if(balance > 0){
+                let message = `నమస్కారం ${cust.name} గారు, మన గ్రామీణ లోన్ కలెక్షన్ సిస్టమ్ ప్రకారం మీ మొత్తం లోన్ బాకీ లో ఇంకా ₹${balance} చెల్లించాల్సి ఉంది. దయచేసి గమనించగలరు.`;
+                let waLink = `https://wa.me/91${cust.phone}?text=${encodeURIComponent(message)}`;
+                actionContent = `<a href="${waLink}" target="_blank"><button class="wa-btn">💬 Send</button></a>`;
+            } else {
+                actionContent = `<span class="paid-badge">✅ Paid Complete</span>`;
+            }
 
             tbody.innerHTML += `<tr>
                 <td><b>${cust.name}</b></td>
                 <td>₹${cust.loan}</td>
                 <td>₹${cust.collected}</td>
-                <td><a href="${waLink}" target="_blank"><button class="wa-btn">💬 Send</button></a></td>
+                <td>${actionContent}</td>
             </tr>`;
         });
         document.getElementById('totalLoansReport').innerText = `మొత్తం లోన్లు: ₹${totalLoans}`;
@@ -528,4 +572,4 @@
 </script>
 </body>
 </html>
-       
+                
