@@ -123,6 +123,22 @@
             font-size: 13px;
             color: #666;
         }
+        /* Tables for Reports */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            font-size: 13px;
+        }
+        th {
+            background-color: #198754;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -168,7 +184,7 @@
         <div class="menu-card" onclick="showScreen('groupsScreen')">👥 Groups Management</div>
         <div class="menu-card" onclick="openCustomersScreen()">👤 Customers Management</div>
         <div class="menu-card" onclick="openCollectionsScreen()">💰 Collections Entry</div>
-        <div class="menu-card" onclick="alert('రిపోర్ట్స్ స్క్రీన్ త్వరలో రానుంది...')">📊 Reports Screen</div>
+        <div class="menu-card" onclick="openReportsScreen()">📊 Reports Screen</div>
     </div>
 
     <button class="logout-btn" onclick="handleLogout()">లాగ్ అవుట్</button>
@@ -238,6 +254,28 @@
     </div>
 </div>
 
+<div id="reportsScreen" class="container hidden">
+    <button class="back-btn" onclick="showScreen('dashboardScreen')">⬅️ డ్యాష్‌బోర్డ్‌కి వెళ్ళు</button>
+    <h2>📊 లోన్ కలెక్షన్ రిపోర్ట్స్</h2>
+    
+    <div style="display: flex; justify-content: space-between; margin-bottom: 15px; background: #eef7f2; padding: 10px; border-radius: 5px; font-weight: bold; color: #198754;">
+        <span id="totalLoansReport">మొత్తం లోన్లు: ₹0</span>
+        <span id="totalCollectedReport">మొత్తం వసూలు: ₹0</span>
+    </div>
+
+    <table id="reportsTable">
+        <thead>
+            <tr>
+                <th>కస్టమర్</th>
+                <th>గ్రూప్</th>
+                <th>లోన్</th>
+                <th>కట్టింది</th>
+            </tr>
+        </thead>
+        <tbody id="reportsTableBody"></tbody>
+    </table>
+</div>
+
 <script>
     let currentRole = 'admin';
     let groupsData = [];
@@ -286,6 +324,7 @@
         document.getElementById('groupsScreen').classList.add('hidden');
         document.getElementById('customersScreen').classList.add('hidden');
         document.getElementById('collectionsScreen').classList.add('hidden');
+        document.getElementById('reportsScreen').classList.add('hidden');
         
         document.getElementById(screenId).classList.remove('hidden');
     }
@@ -337,7 +376,7 @@
 
         if (name === '' || phone === '' || loan === '') { alert('అన్ని వివరాలు ఎంటర్ చేయండి!'); return; }
 
-        customersData.push({ group: group, name: name, phone: phone, loan: loan });
+        customersData.push({ group: group, name: name, phone: phone, loan: parseFloat(loan), collected: 0 });
         document.getElementById('custName').value = '';
         document.getElementById('custPhone').value = '';
         document.getElementById('custLoanAmount').value = '';
@@ -387,6 +426,8 @@
         if (amount === '') { alert('దయచేసి కట్టిన EMI అమౌంట్ ఎంటర్ చేయండి!'); return; }
 
         const cust = customersData[index];
+        cust.collected += parseFloat(amount);
+
         collectionsData.push({ name: cust.name, group: cust.group, amount: amount, date: new Date().toLocaleDateString() });
         document.getElementById('collAmount').value = '';
         alert('కలెక్ట్ ఎంట్రీ విజయవంతంగా సేవ్ చేయబడింది!');
@@ -403,6 +444,34 @@
         collectionsData.forEach(coll => {
             container.innerHTML += `<div class="data-item"><h4>${coll.name} (${coll.group})</h4><p>💰 వసూలైన మొత్తం: ₹${coll.amount} | 📅 తేదీ: ${coll.date}</p></div>`;
         });
+    }
+
+    function openReportsScreen() {
+        showScreen('reportsScreen');
+        let totalLoans = 0;
+        let totalCollected = 0;
+        const tbody = document.getElementById('reportsTableBody');
+        tbody.innerHTML = '';
+
+        if(customersData.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:gray;">రిపోర్ట్స్ చూపించడానికి ఎలాంటి డేటా లేదు.</td></tr>';
+            return;
+        }
+
+        customersData.forEach(cust => {
+            totalLoans += cust.loan;
+            totalCollected += cust.collected;
+            tbody.innerHTML += `
+                <tr>
+                    <td><b>${cust.name}</b></td>
+                    <td>${cust.group}</td>
+                    <td>₹${cust.loan}</td>
+                    <td style="color:green; font-weight:bold;">₹${cust.collected}</td>
+                </tr>`;
+        });
+
+        document.getElementById('totalLoansReport').innerText = `మొత్తం లోన్లు: ₹${totalLoans}`;
+        document.getElementById('totalCollectedReport').innerText = `మొత్తం వసూలు: ₹${totalCollected}`;
     }
 
     function handleLogout() { showScreen('loginScreen'); }
