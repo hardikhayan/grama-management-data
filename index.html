@@ -1,27 +1,90 @@
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Grama Collection Manager</title>
+
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#f0f5f0;
+margin:0;
+padding:0;
+}
+
+.header{
+background:#198754;
+color:white;
+padding:20px;
+text-align:center;
+}
+
+.container{
+max-width:400px;
+margin:30px auto;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.2);
+}
+
+input{
+width:100%;
+padding:12px;
+margin-top:10px;
+margin-bottom:15px;
+border:1px solid #ccc;
+border-radius:5px;
+box-sizing:border-box;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#198754;
+color:white;
+border:none;
+border-radius:5px;
+font-size:16px;
+cursor:pointer;
+}
+
+button:hover{
+opacity:0.9;
+}
+
+.note{
+text-align:center;
+margin-top:15px;
+font-size:14px;
+color:gray;
+}
+</style>
 </head>
 
 <body>
 
+<div class="header">
 <h1>Grama Collection Manager</h1>
+<p>Customer Loan Tracking System</p>
+</div>
 
-<h2>Login</h2>
+<div class="container">
 
-<button>Admin Login</button>
-<button>Customer Login</button>
+<h2>Customer Login</h2>
 
-<hr>
+<input type="text" placeholder="Mobile Number">
 
-<h3>Customer Information</h3>
+<input type="password" placeholder="Password">
 
-<p>Total Loan : ₹50,000</p>
-<p>Paid Amount : ₹20,000</p>
-<p>Balance Amount : ₹30,000</p>
-<p>Status : PAID</p>
+<button>Login</button>
+
+<div class="note">
+Customer can view only their own details
+</div>
+
+</div>
 
 </body>
 </html>
