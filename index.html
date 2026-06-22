@@ -1,90 +1,215 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="te">
 <head>
-<meta charset="UTF-8">
-<title>Grama Collection Manager</title>
-
-<style>
-body{
-font-family:Arial,sans-serif;
-background:#f0f5f0;
-margin:0;
-padding:0;
-}
-
-.header{
-background:#198754;
-color:white;
-padding:20px;
-text-align:center;
-}
-
-.container{
-max-width:400px;
-margin:30px auto;
-background:white;
-padding:20px;
-border-radius:10px;
-box-shadow:0 0 10px rgba(0,0,0,0.2);
-}
-
-input{
-width:100%;
-padding:12px;
-margin-top:10px;
-margin-bottom:15px;
-border:1px solid #ccc;
-border-radius:5px;
-box-sizing:border-box;
-}
-
-button{
-width:100%;
-padding:12px;
-background:#198754;
-color:white;
-border:none;
-border-radius:5px;
-font-size:16px;
-cursor:pointer;
-}
-
-button:hover{
-opacity:0.9;
-}
-
-.note{
-text-align:center;
-margin-top:15px;
-font-size:14px;
-color:gray;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grama Collection Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f5f0;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background: #198754;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 450px;
+            margin: 30px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.15);
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+        .tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: bold;
+            background: #eee;
+            color: #555;
+        }
+        .tab.active {
+            background: #198754;
+            color: white;
+            border-radius: 5px 5px 0 0;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #198754;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .note {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            color: gray;
+        }
+        /* Dashboard Styles */
+        .hidden {
+            display: none;
+        }
+        .dashboard-menu {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .menu-card {
+            background: #eef7f2;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            border: 1px solid #198754;
+            cursor: pointer;
+            font-weight: bold;
+            color: #198754;
+        }
+        .menu-card:hover {
+            background: #198754;
+            color: white;
+        }
+        .logout-btn {
+            background: #dc3545;
+            margin-top: 20px;
+        }
+    </style>
 </head>
-
 <body>
 
 <div class="header">
-<h1>Grama Collection Manager</h1>
-<p>Customer Loan Tracking System</p>
+    <h1>Grama Collection Manager</h1>
+    <p>గ్రామీణ లోన్ కలెక్షన్ అండ్ మేనేజ్‌మెంట్ సిస్టమ్</p>
 </div>
 
-<div class="container">
+<div id="loginScreen" class="container">
+    <div class="tabs">
+        <div id="adminTab" class="tab active" onclick="switchTab('admin')">Admin Login</div>
+        <div id="customerTab" class="tab" onclick="switchTab('customer')">Customer Login</div>
+    </div>
 
-<h2>Customer Login</h2>
+    <h2 id="loginTitle">Admin Login</h2>
+    
+    <div id="phoneInputContainer" class="hidden">
+        <label>మొబైల్ నెంబర్:</label>
+        <input type="text" id="phone" placeholder="Mobile Number">
+    </div>
+    
+    <div id="userInputContainer">
+        <label>యూజర్ నేమ్ / ఈమెయిల్:</label>
+        <input type="text" id="username" placeholder="Admin Username">
+    </div>
 
-<input type="text" placeholder="Mobile Number">
+    <label>పాస్‌వర్డ్:</label>
+    <input type="password" id="password" placeholder="Password">
 
-<input type="password" placeholder="Password">
+    <button onclick="handleLogin()">లాగిన్ అవ్వండి</button>
 
-<button>Login</button>
-
-<div class="note">
-Customer can view only their own details
+    <div id="loginNote" class="note">
+        అడ్మిన్ మాత్రమే గ్రూప్స్ మరియు కలెక్షన్స్ క్రియేట్ చేయగలరు.
+    </div>
 </div>
 
+<div id="dashboardScreen" class="container hidden">
+    <h2 id="welcomeText">స్వాగతం, అడ్మిన్!</h2>
+    <p>యాప్ ఫీచర్స్ ఇక్కడ మేనేజ్ చేసుకోండి:</p>
+
+    <div class="dashboard-menu">
+        <div class="menu-card" onclick="alert('గ్రూప్స్ మేనేజ్‌మెంట్ త్వరలో రానుంది...')">👥 Groups Management</div>
+        <div class="menu-card" onclick="alert('కస్టమర్స్ లిస్ట్ త్వరలో రానుంది...')">👤 Customers Management</div>
+        <div class="menu-card" onclick="alert('కలెక్ట్ ఎంట్రీ త్వరలో రానుంది...')">💰 Collections Entry</div>
+        <div class="menu-card" onclick="alert('రిపోర్ట్స్ త్వరలో రానుంది...')">📊 Reports Screen</div>
+    </div>
+
+    <button class="logout-btn" onclick="handleLogout()">లాగ్ అవుట్</button>
 </div>
+
+<script>
+    let currentRole = 'admin';
+
+    function switchTab(role) {
+        currentRole = role;
+        document.getElementById('adminTab').classList.toggle('active', role === 'admin');
+        document.getElementById('customerTab').classList.toggle('active', role === 'customer');
+        
+        if (role === 'admin') {
+            document.getElementById('loginTitle').innerText = 'Admin Login';
+            document.getElementById('userInputContainer').classList.remove('hidden');
+            document.getElementById('phoneInputContainer').classList.add('hidden');
+            document.getElementById('loginNote').innerText = 'అడ్మిన్ మాత్రమే గ్రూప్స్ మరియు కలెక్షన్స్ క్రియేట్ చేయగలరు.';
+        } else {
+            document.getElementById('loginTitle').innerText = 'Customer Login';
+            document.getElementById('userInputContainer').classList.add('hidden');
+            document.getElementById('phoneInputContainer').classList.remove('hidden');
+            document.getElementById('loginNote').innerText = 'కస్టమర్స్ తమ లోన్ వివరాలు మరియు పేమెంట్ హిస్టరీ మాత్రమే చూడగలరు.';
+        }
+    }
+
+    function handleLogin() {
+        // టెస్టింగ్ కోసం సింపుల్ లాగిన్ క్రెడెన్షియల్స్
+        if (currentRole === 'admin') {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            if (user === 'admin' && pass === '1234') {
+                showDashboard('Admin');
+            } else {
+                alert('తప్పు యూజర్ నేమ్ లేదా పాస్‌వర్డ్! (టెస్టింగ్ కోసం User: admin, Pass: 1234 కొట్టండి)');
+            }
+        } else {
+            const phone = document.getElementById('phone').value;
+            const pass = document.getElementById('password').value;
+            if (phone !== '' && pass !== '') {
+                showDashboard('Customer (' + phone + ')');
+            } else {
+                alert('దయచేసి మొబైల్ నెంబర్ మరియు పాస్‌వర్డ్ ఎంటర్ చేయండి!');
+            }
+        }
+    }
+
+    function showDashboard(userType) {
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('dashboardScreen').classList.remove('hidden');
+        document.getElementById('welcomeText').innerText = `స్వాగతం, ${userType}!`;
+    }
+
+    function handleLogout() {
+        document.getElementById('dashboardScreen').classList.add('hidden');
+        document.getElementById('loginScreen').classList.remove('hidden');
+        // ఇన్‌పుట్స్ క్లియర్ చేయడం
+        document.getElementById('username').value = '';
+        document.getElementById('phone').value = '';
+        document.getElementById('password').value = '';
+    }
+</script>
 
 </body>
 </html>
